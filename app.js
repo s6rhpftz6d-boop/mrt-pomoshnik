@@ -49,6 +49,55 @@ const modules = [
 <h3>Контрастные препараты</h3><p>Гадолинийсодержащие препараты применяются по клиническим показаниям. Выбор препарата, дозы, необходимость лабораторных данных и действия при реакции определяются врачом и локальным протоколом.</p>`},
 { id:"artifacts",icon:"🧪",title:"Артефакты и качество",desc:"Движение, металл, неоднородности",tags:"артефакты движение металл ghosting susceptibility aliasing",body:`
 <h2>Артефакты МРТ</h2><div class="term"><strong>Motion / ghosting.</strong> Повторяющиеся копии структуры из-за движения. Проверь фиксацию, инструктаж, длительность серии и фазовое направление.</div><div class="term"><strong>Susceptibility.</strong> Искажения и выпадение сигнала около границ с разной магнитной восприимчивостью, металла или продуктов крови.</div><div class="term"><strong>Aliasing / wrap-around.</strong> Часть анатомии с противоположной стороны попадает в изображение при недостаточном FOV в направлении фазового кодирования.</div><div class="term"><strong>Chemical shift.</strong> Смещение/полосы на границе жир-вода из-за разницы резонансных частот.</div><div class="term"><strong>Inhomogeneous fat suppression.</strong> Неравномерное подавление жира, часто связанное с неоднородностью B₀/B₁, геометрией и техникой подавления.</div><h3>Алгоритм проверки</h3><ol><li>Назови вид дефекта.</li><li>Определи, повторяется ли он на других сериях.</li><li>Проверь пациента, катушку, укладку и локалайзер.</li><li>Сверь настройки с протоколом.</li><li>Изменения выполняй только в пределах допуска и с оценкой врачом/ответственным специалистом.</li></ol>`},
+{ id:"geLab",icon:"🧮",title:"GE 1.5T — лаборатория параметров",desc:"Интерактивный калькулятор пикселя, вокселя и SNR",tags:"GE 1.5T калькулятор FOV matrix pixel voxel NEX SNR thickness",body:`
+<h2>Лаборатория параметров</h2>
+<p>Здесь можно менять параметры и видеть математические последствия. Это учебная модель, а не подбор клинического протокола.</p>
+<h3>1. Размер пикселя и вокселя</h3>
+<div class="info">Размер пикселя = FOV / матрица. Объём вокселя = размер пикселя по X × размер пикселя по Y × толщина среза.</div>
+<div class="calcgrid">
+<label>FOV по частоте, мм<input id="fovX" type="number" min="10" max="600" value="240"></label>
+<label>Матрица по частоте<input id="matX" type="number" min="32" max="2048" value="320"></label>
+<label>FOV по фазе, мм<input id="fovY" type="number" min="10" max="600" value="240"></label>
+<label>Матрица по фазе<input id="matY" type="number" min="32" max="2048" value="256"></label>
+<label>Толщина среза, мм<input id="thick" type="number" min="0.1" max="100" step="0.1" value="4"></label>
+</div>
+<div class="resultbox" id="voxelResult" aria-live="polite">—</div>
+<h3>2. Что произойдёт при изменении NEX?</h3>
+<label>Исходный NEX <input id="nexBase" type="number" min="1" max="16" step="0.5" value="1"></label>
+<label>Новый NEX <input id="nexNew" type="number" min="1" max="16" step="0.5" value="2"></label>
+<div class="resultbox" id="nexResult" aria-live="polite">—</div>
+<p class="small">При прочих равных SNR приблизительно растёт как √NEX, а время — пропорционально NEX. Например, переход с NEX 1 на 4 примерно удваивает SNR, но примерно учетверяет время. Реальная последовательность может иметь дополнительные факторы.</p>
+<h3>3. Логика влияния параметров</h3>
+<ul>
+<li><strong>Увеличить матрицу при том же FOV:</strong> пиксель меньше, детализация выше, но SNR обычно ниже и/или время больше.</li>
+<li><strong>Увеличить FOV при той же матрице:</strong> охват больше, пиксель крупнее, детализация ниже.</li>
+<li><strong>Увеличить толщину:</strong> воксель больше и SNR обычно выше, но детализация по оси среза хуже и частичный объём выражен сильнее.</li>
+<li><strong>Увеличить NEX:</strong> SNR выше, но сканирование дольше.</li>
+<li><strong>Увеличить TE:</strong> обычно усиливается T2-взвешенность, но сигнал часто снижается.</li>
+<li><strong>Увеличить TR:</strong> обычно уменьшается T1-взвешенность; в spin echo может повыситься SNR и увеличиться время.</li>
+</ul>
+<div class="note">Эффекты зависят от типа последовательности, 2D/3D, ETL, ускорения, катушки и других настроек. Не меняй параметры пациента по результату этого калькулятора без утверждённого протокола.</div>
+<h3>Источники для углубления</h3>
+<p><a href="https://academy.siemens-healthineers.com/_/en-us/mr-essentials-image-quality-usa/" target="_blank" rel="noopener">Siemens Healthineers Academy — MR Image Quality</a></p>
+<p><a href="https://larsonlab.github.io/MRI-education-resources/Signal%20to%20Noise%20Ratio.html" target="_blank" rel="noopener">Principles of MRI — Signal-to-Noise Ratio</a></p>
+<p><a href="https://socr.umich.edu/BPAD1/BPAD1_notes/BPAD1_Chap04_MRI.html" target="_blank" rel="noopener">University of Michigan — MRI, resolution and SNR</a></p>
+`},
+{ id:"troubleshoot",icon:"🔎",title:"Разбор плохого изображения",desc:"С чего начать проверку и что не перепутать",tags:"шум смаз blur motion wrap aliasing обрезано артефакт качество",body:`
+<h2>Разбор плохого изображения</h2>
+<p>Главное правило: сначала описать дефект, затем искать причину. Не начинать с хаотичного изменения TR, TE или матрицы.</p>
+<h3>Ситуация 1. Изображение слишком шумное</h3>
+<ol><li>Сравни с другими сериями и штатным видом этой последовательности.</li><li>Проверь, правильно ли выбрана и подключена катушка, нет ли ошибки позиционирования.</li><li>Убедись, что пациент находится в зоне чувствительности нужных элементов катушки.</li><li>Сверь FOV, матрицу, толщину, NEX и bandwidth с утверждённым протоколом.</li><li>Только затем обсуждай допустимые изменения SNR с ответственным специалистом.</li></ol>
+<p><strong>Важно:</strong> шум не всегда означает, что нужно просто увеличить NEX. Это увеличит время, а причина может быть в катушке, её подключении или неправильном выборе области.</p>
+<h3>Ситуация 2. Изображение смазано</h3>
+<ul><li>Проверь, не двигался ли пациент; объясни необходимость неподвижности.</li><li>Посмотри, есть ли повторяющиеся контуры/ghosting и в каком направлении они идут.</li><li>Сверь направление фазового кодирования и длительность серии.</li><li>Если дефект только на одной серии, сравни её параметры и последовательность с остальными.</li></ul>
+<h3>Ситуация 3. Анатомия обрезана</h3>
+<ul><li>Проверь локалайзер и положение блока.</li><li>Уточни, какой размер FOV задан по фазе и частоте.</li><li>Проверь центрирование, наклон и количество/расположение срезов.</li><li>Не путай недостаточный FOV с wrap-around: при wrap часть анатомии может «заворачиваться» с противоположной стороны.</li></ul>
+<h3>Ситуация 4. Мало детализации</h3>
+<ul><li>Проверь размер пикселя: FOV / матрица.</li><li>Проверь толщину среза и межсрезовый промежуток.</li><li>Помни о компромиссе: уменьшение пикселя или толщины часто снижает SNR.</li><li>Убедись, что оценка качества не ограничена движением или реконструкцией.</li></ul>
+<h3>Ситуация 5. Неравномерно подавлен жир</h3>
+<ul><li>Сравни, на каких участках выражена неоднородность.</li><li>Оцени область исследования, центрирование и наличие металла/воздуха рядом.</li><li>Учитывай неоднородность B₀/B₁ и особенности конкретной техники подавления жира.</li><li>Не подменяй автоматически STIR спектральным Fat Sat или наоборот: выбор зависит от клинической задачи и локального протокола.</li></ul>
+<div class="note"><strong>Граница ответственности:</strong> если дефект связан с неисправностью катушки, оборудования, градиентов, охлаждения или повторяется на разных пациентах — прекрати самостоятельные эксперименты и сообщи ответственному специалисту/инженеру. Клиническую пригодность серии оценивает врач-рентгенолог.</div>
+`},
 { id:"quiz",icon:"📝",title:"Тренажёр знаний",desc:"Проверь понимание базовых принципов",tags:"тест вопросы проверка знаний quiz",body:""}
 ];
 const quiz = [
@@ -60,7 +109,20 @@ const quiz = [
 ];
 const modulesEl=document.getElementById("modules"),home=document.getElementById("home"),detail=document.getElementById("detail"),content=document.getElementById("content"),search=document.getElementById("search");
 function renderCards(list){modulesEl.innerHTML=list.map(m=>`<button class="card" data-id="${m.id}"><div class="ico">${m.icon}</div><h3>${m.title}</h3><p>${m.desc}</p></button>`).join("");modulesEl.querySelectorAll("button").forEach(b=>b.onclick=()=>openModule(b.dataset.id))}
-function openModule(id){const m=modules.find(x=>x.id===id);if(!m)return;home.classList.add("hidden");detail.classList.remove("hidden");if(id==="quiz"){renderQuiz();return}content.innerHTML=m.body}
+function openModule(id){const m=modules.find(x=>x.id===id);if(!m)return;home.classList.add("hidden");detail.classList.remove("hidden");if(id==="quiz"){renderQuiz();return}content.innerHTML=m.body;if(id==="geLab")initGeLab()}
+function initGeLab(){
+ const $=id=>document.getElementById(id);
+ const nums=["fovX","matX","fovY","matY","thick","nexBase","nexNew"];
+ function calc(){
+  const v=Object.fromEntries(nums.map(k=>[k,Number($(k).value)]));
+  if(nums.some(k=>!Number.isFinite(v[k])||v[k]<=0)){ $("voxelResult").textContent="Введи положительные числа во все поля.";return; }
+  const px=v.fovX/v.matX,py=v.fovY/v.matY,vol=px*py*v.thick;
+  $("voxelResult").innerHTML=`Пиксель X: <strong>${px.toFixed(3)} мм</strong><br>Пиксель Y: <strong>${py.toFixed(3)} мм</strong><br>Объём вокселя: <strong>${vol.toFixed(2)} мм³</strong>`;
+  const ratio=v.nexNew/v.nexBase,snr=Math.sqrt(ratio),time=ratio;
+  $("nexResult").innerHTML=`Оценка изменения SNR: <strong>×${snr.toFixed(2)}</strong><br>Оценка изменения времени: <strong>×${time.toFixed(2)}</strong>`;
+ }
+ nums.forEach(k=>$(k).addEventListener("input",calc));calc();
+}
 function renderQuiz(){
   let i=0,score=0;
   function show(){

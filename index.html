@@ -31,12 +31,12 @@ button{font:inherit}.back{border:0;background:transparent;color:var(--blue);padd
 .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.primary,.secondary{border:0;border-radius:11px;padding:11px 15px;cursor:pointer}.primary{background:var(--blue);color:white}.secondary{background:#eaf1f5;color:#214b66}
 .answer{display:block;width:100%;text-align:left;background:#f7fafb;border:1px solid var(--line);border-radius:11px;padding:12px;margin:8px 0;cursor:pointer}.answer.correct{border-color:#27966a;background:#edf8f2}.answer.wrong{border-color:#c65c5c;background:#fff1f1}
 .small{color:var(--muted);font-size:13px}footer{text-align:center;color:var(--muted);padding:26px 12px;font-size:12px}
-.hidden{display:none!important}
+.calcgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px;margin:12px 0}.calcgrid label,.panel>label{display:block;font-size:14px;color:var(--muted);margin:10px 0}.calcgrid input,.panel>label input{display:block;width:100%;padding:10px;border:1px solid var(--line);border-radius:9px;font:inherit;color:var(--ink);background:#fff;margin-top:4px}.resultbox{background:#edf6fa;border:1px solid #c8e0eb;border-radius:12px;padding:14px;margin:12px 0;font-weight:600}.hidden{display:none!important}
 @media(max-width:520px){header{padding:18px}main{padding:14px}.hero{padding:17px}.panel{padding:16px}}
 </style>
 </head>
 <body>
-<header><div class="brand"><div class="logo">🧲</div><div><h1>МРТ-Помощник</h1><p>База знаний рентген-лаборанта · учебная версия 1.0</p></div></div></header>
+<header><div class="brand"><div class="logo">🧲</div><div><h1>МРТ-Помощник</h1><p>База знаний рентген-лаборанта · учебная версия 2.0</p></div></div></header>
 <main>
 <div id="home">
 <input id="search" class="search" type="search" placeholder="Поиск: TR, T2, FOV, артефакты…">
