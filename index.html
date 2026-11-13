@@ -1,50 +1,64 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#142b43">
-<meta name="description" content="Учебный справочник по магнитно-резонансной томографии для рентген-лаборантов">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon.svg" type="image/svg+xml">
-<title>МРТ-Помощник</title>
-<style>
-:root{--navy:#142b43;--blue:#28658a;--cyan:#bce9f5;--bg:#f3f6f8;--card:#fff;--ink:#172533;--muted:#657583;--line:#dce5eb;--accent:#e7f4f8}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}
-header{background:var(--navy);color:white;padding:22px max(18px,calc((100% - 980px)/2)) 26px}
-.brand{display:flex;align-items:center;gap:12px}.logo{width:44px;height:44px;border-radius:14px;background:#234966;display:grid;place-items:center;font-size:24px}
-h1{font-size:24px;margin:0}header p{color:#c8d9e5;margin:5px 0 0;font-size:14px}
-main{max-width:980px;margin:auto;padding:18px}
-.search{width:100%;padding:14px 16px;border:1px solid var(--line);border-radius:14px;font:inherit;background:white;margin-bottom:16px}
-.hero{background:linear-gradient(130deg,#183852,#28658a);color:white;padding:20px;border-radius:18px;margin-bottom:18px}
-.hero h2{margin:0 0 7px;font-size:21px}.hero p{margin:0;color:#dceaf1}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;text-align:left;cursor:pointer;transition:.15s}
-.card:hover{border-color:#7eb6ce;transform:translateY(-1px)}.card .ico{font-size:25px}.card h3{margin:8px 0 4px;font-size:17px}.card p{margin:0;color:var(--muted);font-size:14px}
-button{font:inherit}.back{border:0;background:transparent;color:var(--blue);padding:8px 0;cursor:pointer;font-weight:650}
-.panel{background:white;border:1px solid var(--line);border-radius:16px;padding:20px;margin-top:10px}
-.panel h2{margin:0 0 8px}.panel h3{margin:20px 0 6px}.panel p{margin:8px 0}.panel ul{padding-left:22px}
-.tag{display:inline-block;background:var(--accent);color:#20516e;border-radius:99px;padding:4px 10px;font-size:12px;margin:3px 4px 3px 0}
-.note{background:#fff8e7;border-left:4px solid #d7a43b;padding:12px 14px;border-radius:8px;margin:14px 0;font-size:14px}
-.info{background:#edf6fa;border-left:4px solid #5d9db9;padding:12px 14px;border-radius:8px;margin:14px 0;font-size:14px}
-.term{padding:12px 0;border-bottom:1px solid var(--line)}.term:last-child{border:0}.term strong{color:#173e59}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.primary,.secondary{border:0;border-radius:11px;padding:11px 15px;cursor:pointer}.primary{background:var(--blue);color:white}.secondary{background:#eaf1f5;color:#214b66}
-.answer{display:block;width:100%;text-align:left;background:#f7fafb;border:1px solid var(--line);border-radius:11px;padding:12px;margin:8px 0;cursor:pointer}.answer.correct{border-color:#27966a;background:#edf8f2}.answer.wrong{border-color:#c65c5c;background:#fff1f1}
-.small{color:var(--muted);font-size:13px}footer{text-align:center;color:var(--muted);padding:26px 12px;font-size:12px}
-.calcgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px;margin:12px 0}.calcgrid label,.panel>label{display:block;font-size:14px;color:var(--muted);margin:10px 0}.calcgrid input,.panel>label input{display:block;width:100%;padding:10px;border:1px solid var(--line);border-radius:9px;font:inherit;color:var(--ink);background:#fff;margin-top:4px}.resultbox{background:#edf6fa;border:1px solid #c8e0eb;border-radius:12px;padding:14px;margin:12px 0;font-weight:600}.hidden{display:none!important}
-@media(max-width:520px){header{padding:18px}main{padding:14px}.hero{padding:17px}.panel{padding:16px}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#071521">
+  <meta name="description" content="Учебный курс по МРТ для рентген-лаборантов: простые объяснения и практика.">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <title>МРТ-Помощник 3.0</title>
+  <style>
+    :root{color-scheme:dark;--bg:#071521;--panel:#102536;--panel2:#142e42;--line:#24465d;--text:#e8f2f7;--muted:#a4bac8;--cyan:#54d4e8;--blue:#2c8caf;--green:#48c99a;--red:#ff7c83;--gold:#f2c66d}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#102b3d 0,#071521 55%);color:var(--text);font:16px/1.55 system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+    header{padding:22px 18px 18px;border-bottom:1px solid var(--line);background:#091a28eF;position:sticky;top:0;z-index:3;backdrop-filter:blur(12px)}
+    .head{max-width:900px;margin:auto;display:flex;align-items:center;gap:13px}.logo{width:46px;height:46px;border-radius:15px;background:#15394d;display:grid;place-items:center;font-size:25px;border:1px solid #2b6077}
+    h1{font-size:21px;margin:0;letter-spacing:.2px}header p{margin:2px 0 0;color:var(--muted);font-size:13px}
+    main{max-width:900px;margin:auto;padding:18px 16px 42px}.eyebrow{color:var(--cyan);font-size:12px;text-transform:uppercase;letter-spacing:1.2px;font-weight:700}
+    .hero{padding:20px;border:1px solid #28536a;border-radius:20px;background:linear-gradient(135deg,#12364b,#102738 70%);margin-bottom:17px}
+    .hero h2{font-size:23px;line-height:1.2;margin:6px 0 8px}.hero p{margin:0;color:#c2d5df}.progressline{height:7px;background:#203b4d;border-radius:9px;margin-top:17px;overflow:hidden}.progressline span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--green));border-radius:9px;transition:width .2s}
+    .progresslabel{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin-top:7px}
+    .section-title{font-size:18px;margin:22px 2px 11px}.lessons{display:grid;gap:10px}
+    .lesson{width:100%;text-align:left;background:var(--panel);border:1px solid var(--line);color:var(--text);border-radius:16px;padding:15px;display:flex;gap:13px;align-items:center;cursor:pointer}
+    .lesson:active,.btn:active{transform:scale(.99)}.num{width:38px;height:38px;border-radius:12px;background:#1b3b50;color:var(--cyan);display:grid;place-items:center;font-weight:750;flex:none}
+    .lesson strong{display:block;font-size:15px}.lesson small{display:block;color:var(--muted);font-size:13px;margin-top:2px}.status{margin-left:auto;color:var(--green);font-size:18px}
+    .panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;margin-top:14px}.back{background:none;border:0;color:var(--cyan);font:inherit;padding:4px 0 12px;cursor:pointer}
+    .lesson-title{font-size:23px;line-height:1.25;margin:4px 0 10px}.bodycopy{color:#d4e2e9}.bodycopy p{margin:10px 0}.bodycopy h3{font-size:17px;color:var(--cyan);margin:21px 0 6px}.bodycopy ul{padding-left:21px}.bodycopy li{margin:7px 0}
+    .analogy{border-left:3px solid var(--cyan);background:#123346;padding:12px 14px;border-radius:0 12px 12px 0;margin:15px 0}.analogy b{color:var(--cyan)}
+    .visual{background:#091b29;border:1px solid var(--line);border-radius:14px;padding:15px;margin:14px 0;text-align:center}
+    .pixels{display:grid;grid-template-columns:repeat(8,1fr);gap:3px;max-width:230px;margin:10px auto}.pixels span{aspect-ratio:1;background:#327b96;border-radius:2px}.pixels.fine{grid-template-columns:repeat(12,1fr);max-width:230px}.visual small{color:var(--muted)}
+    .quiz{border-top:1px solid var(--line);margin-top:20px;padding-top:17px}.quiz h3{margin:0 0 10px;font-size:17px}.answer{display:block;width:100%;text-align:left;background:#0b1d2a;border:1px solid var(--line);color:var(--text);padding:12px;border-radius:12px;margin:8px 0;font:inherit;cursor:pointer}.answer.correct{border-color:var(--green);background:#10372f}.answer.wrong{border-color:var(--red);background:#3b2028}.feedback{min-height:24px;color:var(--muted);font-size:14px;margin-top:9px}
+    .actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:17px}.btn{border:0;border-radius:12px;padding:12px 16px;font:600 15px system-ui;cursor:pointer}.primary{background:var(--cyan);color:#06202c}.secondary{background:#1b3a4e;color:var(--text);border:1px solid var(--line)}.note{font-size:13px;color:var(--muted);margin-top:22px}
+    .hidden{display:none!important}footer{text-align:center;color:#7892a2;font-size:12px;padding:24px 8px}
+    @media(min-width:650px){.lessons{grid-template-columns:1fr 1fr}.hero{padding:25px}}
+  </style>
 </head>
 <body>
-<header><div class="brand"><div class="logo">🧲</div><div><h1>МРТ-Помощник</h1><p>База знаний рентген-лаборанта · учебная версия 2.0</p></div></div></header>
+<header><div class="head"><div class="logo">🧲</div><div><h1>МРТ-Помощник 3.0</h1><p>Обучение МРТ с нуля · тёмная медицинская тема</p></div></div></header>
 <main>
-<div id="home">
-<input id="search" class="search" type="search" placeholder="Поиск: TR, T2, FOV, артефакты…">
-<section class="hero"><h2>МРТ — от принципов к практике</h2><p>Короткие объяснения, справочник параметров, протоколы и проверка знаний.</p></section>
-<div id="modules" class="grid"></div>
-</div>
-<div id="detail" class="hidden"><button class="back" id="back">← Все разделы</button><article class="panel" id="content"></article></div>
-<footer>Учебный справочник. Не заменяет локальные протоколы, инструкцию производителя и решение врача-рентгенолога.</footer>
+  <section id="home">
+    <div class="hero">
+      <div class="eyebrow">Учебный маршрут</div>
+      <h2>Разберём МРТ по шагам</h2>
+      <p>Одна тема за раз. Простое объяснение, наглядный пример и короткая проверка понимания.</p>
+      <div class="progressline"><span id="progress"></span></div>
+      <div class="progresslabel"><span>Пройдено уроков</span><span id="progressText">0 из 7</span></div>
+    </div>
+    <h2 class="section-title">Уроки курса</h2>
+    <div class="lessons" id="lessons"></div>
+    <p class="note">Курс предназначен для обучения. Он не заменяет утверждённые протоколы, инструкции производителя и решения врача-рентгенолога. Не меняй параметры клинических исследований самостоятельно на основании учебного примера.</p>
+  </section>
+  <section id="study" class="hidden">
+    <button class="back" id="back">← К списку уроков</button>
+    <article class="panel">
+      <div class="eyebrow" id="lessonNumber"></div>
+      <h2 class="lesson-title" id="lessonTitle"></h2>
+      <div class="bodycopy" id="lessonBody"></div>
+      <div class="quiz" id="quiz"></div>
+      <div class="actions"><button class="btn secondary" id="prev">← Предыдущий</button><button class="btn primary" id="next">Следующий урок →</button></div>
+    </article>
+  </section>
+  <footer>МРТ-Помощник · учебная версия 3.0</footer>
 </main>
-<script src="app.js"></script>
+<script src="./app.js"></script>
 </body></html>
