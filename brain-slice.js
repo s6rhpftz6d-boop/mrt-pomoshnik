@@ -9,12 +9,26 @@
   panel.className = "panel";
   panel.innerHTML = `
     <h2>Визуализация МРТ-среза</h2>
-    <p class="sub">Аксиальный срез головного мозга · учебная модель</p>
+    <p class="sub">Учебная модель аксиального среза головного мозга</p>
+    <p><b>Выбери контраст:</b></p>
+    <div id="contrastModes" style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0">
+      <button type="button" data-mode="T1">T1</button>
+      <button type="button" data-mode="T2">T2</button>
+      <button type="button" data-mode="PD">PD</button>
+    </div>
+    <p id="modeInfo" class="sub">T1 — ликвор тёмный, белое вещество светлее серого.</p>
   `;
   panel.appendChild(canvas);
   document.querySelector("main").prepend(panel);
 
   const ctx = canvas.getContext("2d");
+  let mode = "T1";
+
+  const descriptions = {
+    T1: "T1 — ликвор тёмный, белое вещество светлее серого.",
+    T2: "T2 — ликвор светлый, жидкость имеет высокий сигнал.",
+    PD: "PD — контраст преимущественно зависит от плотности протонов."
+  };
 
   function draw() {
     const tr = +document.querySelector("#tr").value;
@@ -23,13 +37,24 @@
     const nex = +document.querySelector("#nex").value;
     const th = +document.querySelector("#th").value;
 
-    const t1 = tr < 900;
-    const t2 = te > 60;
+    let cortex, white, deep, fluid;
 
-    const cortex = t2 ? "#aebdca" : t1 ? "#8999a5" : "#a0adb7";
-    const white = t2 ? "#687f90" : t1 ? "#d5dfe6" : "#bac7d0";
-    const deep = t2 ? "#8299a8" : t1 ? "#8295a3" : "#9baab5";
-    const fluid = t2 ? "#e5edf3" : t1 ? "#354c5d" : "#71899a";
+    if (mode === "T1") {
+      cortex = "#8999a5";
+      white = "#d5dfe6";
+      deep = "#8295a3";
+      fluid = "#354c5d";
+    } else if (mode === "T2") {
+      cortex = "#aebdca";
+      white = "#687f90";
+      deep = "#8299a8";
+      fluid = "#e5edf3";
+    } else {
+      cortex = "#a0adb7";
+      white = "#bac7d0";
+      deep = "#9baab5";
+      fluid = "#71899a";
+    }
 
     ctx.fillStyle = "#06131e";
     ctx.fillRect(0, 0, 420, 340);
@@ -86,7 +111,7 @@
     ctx.lineWidth = 7;
     ctx.stroke();
 
-    // Левый боковой желудочек
+    // Боковые желудочки
     ctx.fillStyle = fluid;
     ctx.beginPath();
     ctx.moveTo(-5, -19);
@@ -95,7 +120,6 @@
     ctx.bezierCurveTo(-17, -1, -12, -10, -5, -19);
     ctx.fill();
 
-    // Правый боковой желудочек
     ctx.beginPath();
     ctx.moveTo(5, -19);
     ctx.bezierCurveTo(19, -47, 62, -49, 62, -22);
@@ -114,15 +138,14 @@
     ctx.fillStyle = deep;
     ctx.fill();
 
-    // Борозды коры — условная схема
+    // Условные борозды коры
     ctx.strokeStyle = "rgba(35,55,70,.55)";
     ctx.lineWidth = 2;
 
     for (let side of [-1, 1]) {
       for (let i = 0; i < 5; i++) {
-        const x = side * (75 + i * 5);
         ctx.beginPath();
-        ctx.moveTo(x, -85 + i * 25);
+        ctx.moveTo(side * (75 + i * 5), -85 + i * 25);
         ctx.quadraticCurveTo(
           side * (112 + i * 2),
           -65 + i * 27,
@@ -135,7 +158,7 @@
 
     ctx.restore();
 
-    // Условный шум изображения
+    // Условный шум: зависит от NEX, матрицы и толщины
     const noise = Math.max(
       0,
       Math.min(1, 0.7 - nex / 8 + (mat - 256) / 1200 + (4 - th) / 20)
@@ -156,6 +179,28 @@
       ctx.fillRect(x, y, 1.5, 1.5);
     }
   }
+
+  document.querySelectorAll("#contrastModes button").forEach(button => {
+    button.style.background = "#1b3a4e";
+    button.style.color = "#e8f2f7";
+    button.style.border = "1px solid #24465d";
+
+    button.addEventListener("click", () => {
+      mode = button.dataset.mode;
+
+      document.querySelector("#modeInfo").textContent =
+        descriptions[mode];
+
+      document.querySelectorAll("#contrastModes button").forEach(b => {
+        b.style.background =
+          b.dataset.mode === mode ? "#54d4e8" : "#1b3a4e";
+        b.style.color =
+          b.dataset.mode === mode ? "#06202c" : "#e8f2f7";
+      });
+
+      draw();
+    });
+  });
 
   ["tr", "te", "mat", "nex", "th", "fov"].forEach(id => {
     const control = document.querySelector("#" + id);
