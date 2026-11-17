@@ -1,19 +1,18 @@
 (() => {
   const canvas = document.createElement("canvas");
-  canvas.width = 320;
-  canvas.height = 260;
-  canvas.style.cssText = "display:block;width:100%;max-width:420px;margin:12px auto;border-radius:12px;background:#06131e";
+  canvas.width = 420;
+  canvas.height = 340;
+  canvas.style.cssText =
+    "display:block;width:100%;max-width:420px;margin:12px auto;border-radius:12px;background:#06131e";
 
   const panel = document.createElement("section");
   panel.className = "panel";
   panel.innerHTML = `
     <h2>Визуализация МРТ-среза</h2>
-    <p class="sub">Учебная модель аксиального среза головного мозга</p>
+    <p class="sub">Аксиальный срез головного мозга · учебная модель</p>
   `;
   panel.appendChild(canvas);
-
-  const main = document.querySelector("main");
-  main.prepend(panel);
+  document.querySelector("main").prepend(panel);
 
   const ctx = canvas.getContext("2d");
 
@@ -26,57 +25,143 @@
 
     const t1 = tr < 900;
     const t2 = te > 60;
-    const noise = Math.max(0, 1 - nex / 5 + (mat - 256) / 1000 + (4 - th) / 15);
+
+    const cortex = t2 ? "#aebdca" : t1 ? "#8999a5" : "#a0adb7";
+    const white = t2 ? "#687f90" : t1 ? "#d5dfe6" : "#bac7d0";
+    const deep = t2 ? "#8299a8" : t1 ? "#8295a3" : "#9baab5";
+    const fluid = t2 ? "#e5edf3" : t1 ? "#354c5d" : "#71899a";
 
     ctx.fillStyle = "#06131e";
-    ctx.fillRect(0, 0, 320, 260);
+    ctx.fillRect(0, 0, 420, 340);
 
     ctx.save();
-    ctx.translate(160, 130);
+    ctx.translate(210, 170);
 
+    // Контур головы
     ctx.beginPath();
-    ctx.ellipse(0, 0, 105, 116, 0, 0, Math.PI * 2);
-    ctx.fillStyle = t2 ? "#aebbc7" : t1 ? "#687987" : "#8999a6";
+    ctx.ellipse(0, 0, 142, 155, 0, 0, Math.PI * 2);
+    ctx.fillStyle = "#273b4b";
     ctx.fill();
-    ctx.strokeStyle = "#e0e8ed";
-    ctx.lineWidth = 4;
+
+    // Контур мозга
+    ctx.beginPath();
+    ctx.ellipse(0, -4, 126, 139, 0, 0, Math.PI * 2);
+    ctx.fillStyle = cortex;
+    ctx.fill();
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = "#dce6ed";
     ctx.stroke();
 
+    // Белое вещество левого полушария
     ctx.beginPath();
-    ctx.ellipse(0, 0, 82, 91, 0, 0, Math.PI * 2);
-    ctx.fillStyle = t2 ? "#647b8b" : t1 ? "#c1ccd3" : "#9eabb5";
+    ctx.moveTo(-5, -116);
+    ctx.bezierCurveTo(-65, -125, -108, -78, -105, -15);
+    ctx.bezierCurveTo(-110, 55, -66, 111, -8, 116);
+    ctx.bezierCurveTo(-25, 60, -24, -55, -5, -116);
+    ctx.fillStyle = white;
+    ctx.fill();
+
+    // Белое вещество правого полушария
+    ctx.beginPath();
+    ctx.moveTo(5, -116);
+    ctx.bezierCurveTo(65, -125, 108, -78, 105, -15);
+    ctx.bezierCurveTo(110, 55, 66, 111, 8, 116);
+    ctx.bezierCurveTo(25, 60, 24, -55, 5, -116);
+    ctx.fill();
+
+    // Глубокие структуры
+    ctx.fillStyle = deep;
+    ctx.beginPath();
+    ctx.ellipse(-37, -4, 23, 39, -0.15, 0, Math.PI * 2);
     ctx.fill();
 
     ctx.beginPath();
-    ctx.moveTo(0, -12);
-    ctx.bezierCurveTo(-45, -70, -75, -20, -40, 22);
-    ctx.bezierCurveTo(-15, 45, -12, 20, 0, 12);
-    ctx.bezierCurveTo(12, 20, 15, 45, 40, 22);
-    ctx.bezierCurveTo(75, -20, 45, -70, 0, -12);
-    ctx.fillStyle = t1 ? "#344e60" : t2 ? "#d5dfe5" : "#748b9a";
+    ctx.ellipse(37, -4, 23, 39, 0.15, 0, Math.PI * 2);
     ctx.fill();
+
+    // Мозолистое тело
+    ctx.beginPath();
+    ctx.ellipse(0, -40, 39, 13, 0, Math.PI, Math.PI * 2);
+    ctx.strokeStyle = cortex;
+    ctx.lineWidth = 7;
+    ctx.stroke();
+
+    // Левый боковой желудочек
+    ctx.fillStyle = fluid;
+    ctx.beginPath();
+    ctx.moveTo(-5, -19);
+    ctx.bezierCurveTo(-19, -47, -62, -49, -62, -22);
+    ctx.bezierCurveTo(-62, -3, -35, 5, -9, 17);
+    ctx.bezierCurveTo(-17, -1, -12, -10, -5, -19);
+    ctx.fill();
+
+    // Правый боковой желудочек
+    ctx.beginPath();
+    ctx.moveTo(5, -19);
+    ctx.bezierCurveTo(19, -47, 62, -49, 62, -22);
+    ctx.bezierCurveTo(62, -3, 35, 5, 9, 17);
+    ctx.bezierCurveTo(17, -1, 12, -10, 5, -19);
+    ctx.fill();
+
+    // Третий желудочек
+    ctx.beginPath();
+    ctx.ellipse(0, 14, 5, 19, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Мозжечок
+    ctx.beginPath();
+    ctx.ellipse(0, 103, 48, 27, 0, 0, Math.PI * 2);
+    ctx.fillStyle = deep;
+    ctx.fill();
+
+    // Борозды коры — условная схема
+    ctx.strokeStyle = "rgba(35,55,70,.55)";
+    ctx.lineWidth = 2;
+
+    for (let side of [-1, 1]) {
+      for (let i = 0; i < 5; i++) {
+        const x = side * (75 + i * 5);
+        ctx.beginPath();
+        ctx.moveTo(x, -85 + i * 25);
+        ctx.quadraticCurveTo(
+          side * (112 + i * 2),
+          -65 + i * 27,
+          side * (92 + i * 3),
+          -42 + i * 25
+        );
+        ctx.stroke();
+      }
+    }
 
     ctx.restore();
 
+    // Условный шум изображения
+    const noise = Math.max(
+      0,
+      Math.min(1, 0.7 - nex / 8 + (mat - 256) / 1200 + (4 - th) / 20)
+    );
+
     let seed = 123;
-    const amount = Math.max(0, Math.min(1800, noise * 1800));
+    const amount = Math.round(noise * 1400);
 
     for (let i = 0; i < amount; i++) {
       seed = (seed * 16807) % 2147483647;
-      const x = seed % 320;
+      const x = seed % 420;
       seed = (seed * 16807) % 2147483647;
-      const y = seed % 260;
+      const y = seed % 340;
 
       ctx.fillStyle = i % 2
-        ? "rgba(255,255,255,.25)"
-        : "rgba(0,0,0,.25)";
+        ? "rgba(255,255,255,.18)"
+        : "rgba(0,0,0,.18)";
       ctx.fillRect(x, y, 1.5, 1.5);
     }
   }
 
   ["tr", "te", "mat", "nex", "th", "fov"].forEach(id => {
-    document.querySelector("#" + id).addEventListener("input", draw);
+    const control = document.querySelector("#" + id);
+    if (control) control.addEventListener("input", draw);
   });
 
   draw();
 })();
+
