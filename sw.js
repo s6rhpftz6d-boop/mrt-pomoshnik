@@ -1,9 +1,10 @@
-const CACHE="mrt-pomoshnik-v3-1-cache-2";
+const CACHE="mrt-pomoshnik-v3-1-cache-3";
 const ASSETS=[
   "./",
   "./index.html",
   "./app.js",
   "./trainer.html",
+  "./brain-slice.js",
   "./manifest.webmanifest",
   "./icon.svg"
 ];
